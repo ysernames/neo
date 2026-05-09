@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEO CUIZON - PORTFOLIO</title>
+    <title>Neo Cuizon | Portfolio</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #f7f6f2;
+            --panel: #f7f6f2;
+            --ink: #080808;
+            --muted: #6d6b66;
+            --line: rgba(8, 8, 8, 0.12);
+            --soft-line: rgba(8, 8, 8, 0.08);
+            --accent: #ef4d32;
+            --green: #2e6e5f;
+            --blue: #315c9f;
+            --shadow: 0 30px 80px rgba(8, 8, 8, 0.14);
+            --radius: 34px;
         }
 
-        :root {
-            --black: #000000;
-            --white: #ffffff;
-            --gray: #808080;
-            --red: #ff0000;
-            --yellow: #ffff00;
-            --blue: #0000ff;
+        * {
+            box-sizing: border-box;
         }
 
         html {
@@ -25,886 +28,1839 @@
         }
 
         body {
-            font-family: 'Courier New', monospace;
-            background: var(--white);
-            color: var(--black);
-            line-height: 1.4;
+            margin: 0;
+            min-height: 100vh;
             overflow-x: hidden;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.35;
         }
 
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
+        body::selection {
+            background: var(--ink);
+            color: var(--panel);
+        }
+
+        a {
+            color: inherit;
+        }
+
+        img {
+            display: block;
             width: 100%;
-            background: var(--black);
-            border-bottom: 5px solid var(--black);
-            z-index: 1000;
-            padding: 1rem 0;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .pixel-snow-container {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+            contain: layout style paint;
+            opacity: 0.42;
+            mix-blend-mode: multiply;
+        }
+
+        .pixel-snow-container canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            transform: translateZ(0);
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+
+        .loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            background: var(--ink);
+            color: var(--panel);
+            transition: opacity 700ms ease, visibility 700ms ease;
+            animation: loaderAutoHide 700ms ease 2600ms forwards;
+        }
+
+        .loader.is-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-inner {
+            width: min(900px, calc(100% - 48px));
+            display: grid;
+            gap: 1.4rem;
+            text-align: center;
+        }
+
+        .loader-kicker {
+            justify-self: center;
+            display: inline-flex;
             align-items: center;
-        }
-
-        .logo {
+            gap: 0.6rem;
+            color: rgba(247, 246, 242, 0.72);
+            font-size: 0.78rem;
             font-weight: 900;
-            font-size: 2rem;
-            color: var(--yellow);
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            letter-spacing: -2px;
-            transform: skewX(-5deg);
         }
 
-        .nav-links {
-            display: flex;
-            gap: 3rem;
+        .loader-kicker::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .loader-title {
+            margin: 0;
+            font-size: clamp(4rem, 18vw, 14rem);
+            line-height: 0.78;
+            letter-spacing: -0.12em;
+            font-weight: 950;
+        }
+
+        .loader-line {
+            height: 2px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(247, 246, 242, 0.18);
+        }
+
+        .loader-line span {
+            display: block;
+            width: 38%;
+            height: 100%;
+            border-radius: inherit;
+            background: var(--panel);
+            animation: loaderSweep 1300ms ease-in-out infinite;
+        }
+
+        @keyframes loaderSweep {
+            0% {
+                transform: translateX(-110%);
+            }
+            100% {
+                transform: translateX(285%);
+            }
+        }
+
+        @keyframes loaderAutoHide {
+            to {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+        }
+
+        .skip-link {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 5000;
+            transform: translateY(-150%);
+            border-radius: 999px;
+            background: var(--ink);
+            color: var(--panel);
+            padding: 0.75rem 1rem;
+        }
+
+        .skip-link:focus {
+            transform: translateY(0);
+        }
+
+        .page-shell {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            min-height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            border: 0;
+            border-radius: 0;
+            background:
+                radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.8), transparent 28rem),
+                radial-gradient(circle at 92% 20%, rgba(239, 77, 50, 0.06), transparent 30rem),
+                var(--panel);
+            box-shadow: none;
+            backdrop-filter: none;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr 0.9fr 0.95fr;
+            gap: 2rem;
+            align-items: start;
+            min-height: 148px;
+            padding: 48px 9vw 24px;
+            background: rgba(247, 246, 242, 0.78);
+            backdrop-filter: blur(18px);
+        }
+
+        .identity {
+            min-width: 0;
+            display: grid;
+            gap: 0.35rem;
+            text-decoration: none;
+        }
+
+        .identity strong {
+            max-width: 250px;
+            font-size: clamp(1rem, 1.3vw, 1.22rem);
+            line-height: 1.06;
+            letter-spacing: -0.02em;
+            overflow-wrap: break-word;
+        }
+
+        .identity span,
+        .mini-label,
+        .mini-nav a,
+        .socials a,
+        .status {
+            color: var(--muted);
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .mini-group {
+            display: grid;
+            gap: 0.55rem;
+            justify-items: start;
+        }
+
+        .mini-label {
+            color: var(--ink);
+            text-transform: none;
+        }
+
+        .mini-nav,
+        .socials {
+            display: grid;
+            gap: 0.38rem;
+            margin: 0;
+            padding: 0;
             list-style: none;
         }
 
-        .nav-links a {
-            color: var(--white);
+        .mini-nav a,
+        .socials a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.42rem;
+            min-height: 20px;
             text-decoration: none;
-            font-size: 1rem;
+        }
+
+        .mini-nav a:hover,
+        .socials a:hover,
+        .mini-nav a:focus-visible,
+        .socials a:focus-visible {
+            color: var(--ink);
+            outline: none;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .dot.green {
+            background: var(--green);
+        }
+
+        .dot.blue {
+            background: var(--blue);
+        }
+
+        .cta-stack {
+            display: grid;
+            gap: 0.72rem;
+            justify-items: start;
+        }
+
+        .cta-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            text-decoration: none;
+            font-size: clamp(1rem, 1.4vw, 1.24rem);
             font-weight: 700;
-            text-transform: uppercase;
-            border: 3px solid transparent;
-            padding: 0.5rem 1rem;
-            transition: all 0.2s;
+            letter-spacing: -0.04em;
         }
 
-        .nav-links a:hover {
-            border: 3px solid var(--yellow);
-            background: var(--yellow);
-            color: var(--black);
+        .cta-link .bubble {
+            display: grid;
+            place-items: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--panel);
+            font-size: 0.72rem;
+            line-height: 1;
         }
 
-        .hamburger {
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+        }
+
+        .status::after {
+            content: "";
+            width: 12px;
+            height: 12px;
+            border: 1px solid currentColor;
+            border-radius: 50%;
+        }
+
+        .menu-button {
             display: none;
-            flex-direction: column;
-            gap: 6px;
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            background: var(--panel);
+            color: var(--ink);
             cursor: pointer;
         }
 
-        .hamburger span {
-            width: 30px;
-            height: 4px;
-            background: var(--yellow);
+        .menu-button span {
+            display: block;
+            width: 17px;
+            height: 2px;
+            margin: 4px auto;
+            background: currentColor;
         }
 
-        /* Hero Section */
+        main {
+            position: relative;
+        }
+
         .hero {
-            min-height: 100vh;
+            position: relative;
+            isolation: isolate;
+            min-height: auto;
             display: grid;
-            place-items: center;
-            padding: 8rem 2rem 4rem;
-            background: var(--white);
-            position: relative;
-            border-bottom: 8px solid var(--black);
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: clamp(1rem, 2vw, 2rem);
+            padding: clamp(2rem, 4vw, 4rem) 0 0;
         }
 
-        .hero::before {
-            content: 'NEO';
-            position: absolute;
-            font-size: 20rem;
-            font-weight: 900;
-            color: rgba(0, 0, 0, 0.03);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 0;
+        .hero-intro {
+            position: relative;
+            z-index: 4;
+            grid-column: 4 / 10;
+            width: 100%;
+            margin: 0 0 clamp(1.5rem, 3vw, 3rem);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 2rem;
+            align-items: end;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            max-width: 1200px;
+        .hero-intro p {
+            margin: 0;
+            max-width: 540px;
+            font-size: clamp(1.08rem, 2vw, 1.5rem);
+            letter-spacing: -0.035em;
+            overflow-wrap: break-word;
         }
 
         .hero-badge {
-            display: inline-block;
-            background: var(--yellow);
-            color: var(--black);
-            padding: 0.5rem 1.5rem;
-            font-weight: 900;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            min-height: 42px;
+            padding: 0 0.9rem;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .hero-badge::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .wordmark-wrap {
+            position: relative;
+            z-index: 1;
+            grid-column: 1 / -1;
+            grid-row: 2;
+            height: clamp(230px, 31vw, 410px);
+            overflow: visible;
+            border-top: 1px solid var(--soft-line);
+            pointer-events: none;
+        }
+
+        .wordmark {
+            position: absolute;
+            z-index: 1;
+            left: 50%;
+            right: auto;
+            bottom: 0;
+            margin: 0;
+            color: var(--ink);
+            font-size: clamp(6rem, 19vw, 18rem);
+            line-height: 0.72;
+            letter-spacing: -0.12em;
+            font-weight: 950;
+            white-space: nowrap;
+            text-align: center;
+            transform: translateX(-50%);
+            will-change: transform;
+        }
+
+        .floating-photo {
+            position: relative;
+            z-index: 3;
+            overflow: hidden;
+            border: 8px solid var(--panel);
+            border-radius: 26px;
+            box-shadow: 0 24px 70px rgba(8, 8, 8, 0.22);
+            isolation: isolate;
+            will-change: transform;
+        }
+
+        .floating-photo.one {
+            grid-column: 9 / 12;
+            grid-row: 2;
+            align-self: start;
+            justify-self: center;
+            width: min(290px, 17vw);
+            aspect-ratio: 4 / 5;
+            margin-top: clamp(-3rem, -4vw, -1rem);
+            transform: rotate(2deg);
+        }
+
+        .floating-photo.two {
+            grid-column: 2 / 5;
+            grid-row: 2;
+            align-self: end;
+            justify-self: center;
+            width: min(220px, 14vw);
+            aspect-ratio: 5 / 4;
+            margin-bottom: clamp(1rem, 3vw, 3rem);
+            transform: rotate(-3deg);
+        }
+
+        .section {
+            padding: clamp(5rem, 10vw, 9rem) 9vw;
+            border-bottom: 1px solid var(--soft-line);
+        }
+
+        .section-head {
+            display: grid;
+            grid-template-columns: 0.55fr 1.45fr;
+            gap: 3rem;
+            margin-bottom: clamp(2rem, 5vw, 4rem);
+        }
+
+        .section-number {
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            border: 4px solid var(--black);
-            margin-bottom: 2rem;
-            transform: rotate(-2deg);
-        }
-
-        h1 {
-            font-size: 7rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -5px;
-            line-height: 0.9;
-            margin-bottom: 2rem;
-            transform: scaleY(1.2);
-        }
-
-        .hero h1 span {
-            display: block;
-        }
-
-        .hero h1 .line1 {
-            color: var(--black);
-        }
-
-        .hero h1 .line2 {
-            color: var(--red);
-            text-decoration: line-through;
-        }
-
-        .hero h1 .line3 {
-            color: var(--blue);
-        }
-
-        .subtitle {
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 3rem;
-            border: 4px solid var(--black);
-            padding: 1rem;
-            background: var(--white);
-            display: inline-block;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 1.25rem 3rem;
-            font-size: 1.1rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            text-decoration: none;
-            border: 4px solid var(--black);
-            transition: all 0.2s;
-            cursor: pointer;
-            font-family: 'Courier New', monospace;
-        }
-
-        .btn-primary {
-            background: var(--black);
-            color: var(--yellow);
-        }
-
-        .btn-primary:hover {
-            background: var(--yellow);
-            color: var(--black);
-            transform: translate(-4px, -4px);
-            box-shadow: 4px 4px 0 var(--black);
-        }
-
-        .btn-secondary {
-            background: var(--white);
-            color: var(--black);
-        }
-
-        .btn-secondary:hover {
-            background: var(--red);
-            color: var(--white);
-            transform: translate(-4px, -4px);
-            box-shadow: 4px 4px 0 var(--black);
-        }
-
-        /* Section Base */
-        section {
-            padding: 6rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            border-bottom: 8px solid var(--black);
         }
 
         .section-title {
-            font-size: 5rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 4rem;
-            border: 6px solid var(--black);
-            padding: 1rem;
-            background: var(--yellow);
-            display: inline-block;
-            transform: rotate(-1deg);
+            margin: 0;
+            max-width: 840px;
+            font-size: clamp(2.7rem, 7vw, 8rem);
+            line-height: 0.86;
+            letter-spacing: -0.09em;
+            font-weight: 950;
         }
 
-        /* About Section */
-        #about {
-            background: var(--white);
-        }
-
-        .about-grid {
+        .about-layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            grid-template-columns: minmax(260px, 0.65fr) minmax(0, 1.35fr);
+            gap: 1rem;
         }
 
-        .about-box {
-            border: 5px solid var(--black);
-            padding: 2.5rem;
-            background: var(--white);
-            position: relative;
+        .portrait-card {
+            overflow: hidden;
+            min-height: 520px;
+            border-radius: 28px;
+            background: var(--ink);
         }
 
-        .about-box::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: 10px;
-            bottom: 10px;
-            border: 5px solid var(--black);
-            z-index: -1;
+        .portrait-card img {
+            filter: grayscale(0.08) contrast(1.04);
         }
 
-        .about-box h3 {
-            font-size: 2rem;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            background: var(--black);
-            color: var(--yellow);
-            padding: 0.5rem;
-            display: inline-block;
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
         }
 
-        .about-box p {
-            font-size: 1.1rem;
-            line-height: 1.6;
+        .info-card {
+            min-height: 252px;
+            display: grid;
+            align-content: space-between;
+            gap: 2rem;
+            padding: 1.4rem;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.45);
         }
 
-        .skill-bar {
-            margin-bottom: 2rem;
+        .info-card.wide {
+            grid-column: 1 / -1;
+            min-height: 220px;
         }
 
-        .skill-bar h4 {
-            font-size: 1.3rem;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
+        .info-card strong {
+            display: block;
+            max-width: 720px;
+            font-size: clamp(1.25rem, 2.7vw, 2.65rem);
+            line-height: 0.96;
+            letter-spacing: -0.06em;
         }
 
-        .bar-container {
-            border: 4px solid var(--black);
-            height: 40px;
-            background: var(--white);
-            position: relative;
+        .info-card p,
+        .info-card span {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.94rem;
+            font-weight: 700;
         }
 
-        .bar-fill {
-            height: 100%;
-            background: var(--black);
-            display: flex;
+        .skill-list {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .skill-row {
+            display: grid;
+            grid-template-columns: 96px 1fr 44px;
             align-items: center;
-            justify-content: flex-end;
-            padding-right: 1rem;
-            color: var(--yellow);
-            font-weight: 900;
+            gap: 0.75rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: 800;
         }
 
-        /* Gallery Section */
-        #gallery {
-            background: var(--yellow);
+        .skill-track {
+            height: 6px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(8, 8, 8, 0.12);
+        }
+
+        .skill-track i {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: var(--ink);
         }
 
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 3rem;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1rem;
         }
 
-        .day-box {
-            border: 6px solid var(--black);
-            background: var(--white);
-            padding: 2.5rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .day-box:hover {
-            transform: translate(-6px, -6px);
-            box-shadow: 6px 6px 0 var(--black);
-        }
-
-        .day-number {
-            font-size: 4rem;
-            font-weight: 900;
-            position: absolute;
-            top: -1rem;
-            right: 1rem;
-            background: var(--red);
-            color: var(--white);
-            padding: 0.5rem 1rem;
-            border: 4px solid var(--black);
-        }
-
-        .day-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-        }
-
-        .day-box h3 {
-            font-size: 2rem;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-
-        .day-box p {
-            font-size: 1.1rem;
-            line-height: 1.5;
-        }
-
-        /* Companies Section */
-        #companies {
-            background: var(--white);
-        }
-
-        .companies-grid {
+        .day-card {
+            min-height: 560px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
+            grid-template-rows: 1fr auto;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            background: var(--panel);
+            color: var(--ink);
+            text-align: left;
+            cursor: pointer;
+            transition: transform 220ms ease, box-shadow 220ms ease;
         }
 
-        .company-box {
-            border: 5px solid var(--black);
-            padding: 2rem;
-            background: var(--white);
-            text-align: center;
-            transition: all 0.2s;
+        .day-card:hover,
+        .day-card:focus-visible {
+            transform: translateY(-8px);
+            box-shadow: 0 24px 70px rgba(8, 8, 8, 0.16);
+            outline: none;
         }
 
-        .company-box:hover {
-            background: var(--black);
-            color: var(--yellow);
+        .day-card:hover img,
+        .day-card:focus-visible img {
+            transform: scale(1.08);
         }
 
-        .company-box:hover .company-logo {
-            background: var(--yellow);
-            color: var(--black);
+        .day-media {
+            min-height: 320px;
+            overflow: hidden;
+            background: #c7c3bc;
         }
 
-        .company-logo {
-            width: 120px;
-            height: 120px;
-            border: 5px solid var(--black);
+        .day-media img {
+            transition: transform 500ms ease;
+        }
+
+        .day-copy {
+            display: grid;
+            gap: 1.8rem;
+            padding: 1.15rem;
+        }
+
+        .day-meta {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2.5rem;
-            font-weight: 900;
-            background: var(--black);
-            color: var(--yellow);
-        }
-
-        .company-box h3 {
-            font-size: 1.4rem;
+            justify-content: space-between;
+            gap: 1rem;
+            color: var(--muted);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            margin-bottom: 1rem;
-            font-weight: 900;
         }
 
-        /* Certification Section */
-        #certification {
-            background: var(--blue);
-            color: var(--white);
+        .day-card h3 {
+            margin: 0.8rem 0 0;
+            font-size: clamp(1.35rem, 2vw, 2.1rem);
+            line-height: 0.95;
+            letter-spacing: -0.055em;
         }
 
-        #certification .section-title {
-            background: var(--white);
-            color: var(--black);
-        }
-
-        .cert-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .cert-box {
-            border: 6px solid var(--black);
-            padding: 3rem;
-            background: var(--white);
-            color: var(--black);
-        }
-
-        .cert-image {
-            width: 100%;
-            height: 500px;
-            border: 5px solid var(--black);
-            background: repeating-linear-gradient(
-                45deg,
-                var(--white),
-                var(--white) 10px,
-                var(--yellow) 10px,
-                var(--yellow) 20px
-            );
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-        }
-
-        .cert-box h3 {
-            font-size: 2rem;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            background: var(--black);
-            color: var(--yellow);
-            padding: 1rem;
-            display: inline-block;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--black);
-            color: var(--yellow);
-            padding: 4rem 2rem;
-            text-align: center;
-            border-top: 8px solid var(--yellow);
-        }
-
-        footer h3 {
-            font-size: 3rem;
-            text-transform: uppercase;
-            font-weight: 900;
-            margin-bottom: 2rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 3rem;
-            justify-content: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--yellow);
-            text-decoration: none;
-            font-size: 1.3rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            border: 3px solid var(--yellow);
-            padding: 0.75rem 1.5rem;
-            transition: all 0.2s;
-        }
-
-        .footer-links a:hover {
-            background: var(--yellow);
-            color: var(--black);
-        }
-
-        .copyright {
-            font-size: 1rem;
-            text-transform: uppercase;
+        .day-card p {
+            margin: 0.75rem 0 0;
+            color: var(--muted);
+            font-size: 0.92rem;
             font-weight: 700;
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 2000;
+        .open-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--line);
+            font-size: 0.82rem;
+            font-weight: 900;
+        }
+
+        .companies {
+            display: grid;
+            gap: 0.7rem;
+        }
+
+        .company-row {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+            padding: 1.2rem 0;
+            border-top: 1px solid var(--line);
+        }
+
+        .company-row:last-child {
+            border-bottom: 1px solid var(--line);
+        }
+
+        .company-mark {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--ink);
+            color: var(--panel);
+            font-size: 0.86rem;
+            font-weight: 900;
+        }
+
+        .company-row h3 {
+            margin: 0;
+            font-size: clamp(1.55rem, 3vw, 3.6rem);
+            line-height: 0.92;
+            letter-spacing: -0.075em;
+        }
+
+        .company-row p {
+            max-width: 270px;
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .certificate-layout {
+            display: grid;
+            grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr);
+            gap: 1rem;
+            align-items: stretch;
+        }
+
+        .certificate-frame {
+            min-height: 520px;
+            margin: 0;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            background: white;
+            box-shadow: 0 18px 60px rgba(8, 8, 8, 0.12);
+        }
+
+        .certificate-frame img {
+            object-fit: contain;
+            padding: 1.25rem;
+            background: white;
+        }
+
+        .certificate-copy {
+            display: grid;
+            align-content: space-between;
+            gap: 2rem;
+            min-height: 520px;
             padding: 2rem;
-            overflow-y: auto;
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            background: var(--ink);
+            color: var(--panel);
+        }
+
+        .certificate-copy h3 {
+            max-width: 760px;
+            margin: 0;
+            font-size: clamp(2.4rem, 5vw, 6.5rem);
+            line-height: 0.86;
+            letter-spacing: -0.08em;
+        }
+
+        .certificate-copy p {
+            max-width: 560px;
+            margin: 1rem 0 0;
+            color: rgba(247, 246, 242, 0.68);
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .visit-list {
+            display: grid;
+            gap: 0;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .visit-list li {
+            padding: 0.85rem 0;
+            border-top: 1px solid rgba(247, 246, 242, 0.16);
+            color: rgba(247, 246, 242, 0.82);
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+
+        .contact-section {
+            padding: clamp(4rem, 8vw, 7rem) 9vw 0;
+        }
+
+        .contact-panel {
+            min-height: 430px;
+            position: relative;
+            display: grid;
+            align-items: end;
+            overflow: hidden;
+            padding: 2rem;
+            border-radius: 30px 30px 0 0;
+            background: var(--ink);
+            color: var(--panel);
+        }
+
+        .contact-grid {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+            align-items: end;
+        }
+
+        .contact-panel h2 {
+            margin: 0;
+            font-size: clamp(4rem, 16vw, 16rem);
+            line-height: 0.72;
+            letter-spacing: -0.13em;
+            font-weight: 950;
+        }
+
+        .contact-panel p {
+            max-width: 360px;
+            margin: 0 0 1.2rem;
+            color: rgba(247, 246, 242, 0.68);
+            font-weight: 700;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+
+        .contact-links a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 40px;
+            padding: 0 0.9rem;
+            border: 1px solid rgba(247, 246, 242, 0.2);
+            border-radius: 999px;
+            color: var(--panel);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 800;
+        }
+
+        .contact-links a:hover,
+        .contact-links a:focus-visible {
+            background: var(--panel);
+            color: var(--ink);
+            outline: none;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 4000;
+            display: none;
+            padding: 1.25rem;
+            background: rgba(8, 8, 8, 0.76);
+            overflow: auto;
         }
 
         .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: grid;
+            place-items: center;
         }
 
         .modal-content {
-            background: var(--white);
-            border: 8px solid var(--black);
-            padding: 3rem;
-            max-width: 1000px;
-            width: 100%;
-            position: relative;
+            width: min(1120px, 100%);
+            max-height: calc(100vh - 2.5rem);
+            overflow: auto;
+            border-radius: 30px;
+            background: var(--panel);
+            box-shadow: var(--shadow);
         }
 
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--red);
-            border: 4px solid var(--black);
-            color: var(--white);
-            font-size: 2rem;
+        .modal-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: start;
+            padding: 1.2rem;
+            border-bottom: 1px solid var(--line);
+            background: rgba(247, 246, 242, 0.92);
+            backdrop-filter: blur(16px);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: clamp(1.8rem, 4vw, 4.5rem);
+            line-height: 0.92;
+            letter-spacing: -0.075em;
+        }
+
+        .modal-header p {
+            margin: 0.45rem 0 0;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .close-button {
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            background: var(--ink);
+            color: var(--panel);
             cursor: pointer;
-            width: 50px;
-            height: 50px;
+            font-size: 1rem;
             font-weight: 900;
-            font-family: 'Courier New', monospace;
-        }
-
-        .modal-close:hover {
-            background: var(--yellow);
-            color: var(--black);
-        }
-
-        .modal h2 {
-            font-size: 3rem;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            font-weight: 900;
-        }
-
-        .modal p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
         }
 
         .modal-gallery {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            padding: 1rem;
         }
 
         .modal-image {
-            width: 100%;
-            height: 300px;
-            border: 5px solid var(--black);
-            background: repeating-linear-gradient(
-                0deg,
-                var(--white),
-                var(--white) 20px,
-                var(--gray) 20px,
-                var(--gray) 40px
-            );
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 1.5rem;
+            min-height: 360px;
+            margin: 0;
+            overflow: hidden;
+            border-radius: 24px;
+            background: #c7c3bc;
         }
 
-        /* Back to Top */
         .back-to-top {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 60px;
-            height: 60px;
-            background: var(--yellow);
-            border: 5px solid var(--black);
-            color: var(--black);
-            font-size: 2rem;
+            right: 1.2rem;
+            bottom: 1.2rem;
+            z-index: 1500;
+            width: 54px;
+            height: 54px;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            background: var(--panel);
+            color: var(--ink);
+            box-shadow: 0 12px 40px rgba(8, 8, 8, 0.14);
             cursor: pointer;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.2s;
-            z-index: 999;
-            font-weight: 900;
-            font-family: 'Courier New', monospace;
+            transform: translateY(16px);
+            transition: opacity 200ms ease, transform 200ms ease;
         }
 
         .back-to-top.visible {
             opacity: 1;
-            pointer-events: all;
+            pointer-events: auto;
+            transform: translateY(0);
         }
 
-        .back-to-top:hover {
-            transform: translate(-4px, -4px);
-            box-shadow: 4px 4px 0 var(--black);
-        }
-
-        /* Responsive */
-        @media (max-width: 968px) {
-            .hamburger { display: flex; }
-            .nav-links {
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                flex-direction: column;
-                background: var(--black);
-                padding: 2rem;
-                gap: 1rem;
-                display: none;
-                border-bottom: 5px solid var(--yellow);
-            }
-            .nav-links.active { display: flex; }
-            h1 { font-size: 4rem; }
-            .section-title { font-size: 3rem; }
-            .about-grid, .gallery-grid { grid-template-columns: 1fr; }
-            .modal-gallery { grid-template-columns: 1fr; }
-        }
-
-        .fade-up {
+        .reveal {
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.6s ease-out;
+            transform: translateY(28px);
+            transition: opacity 700ms ease, transform 700ms ease;
         }
 
-        .fade-up.visible {
+        .reveal.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        .hero .reveal {
+            opacity: 1;
+            transform: none;
+        }
+
+        @media (max-width: 1100px) {
+            .topbar {
+                width: 100vw;
+                grid-template-columns: 1fr auto;
+                min-height: auto;
+                padding: 1.25rem;
+                gap: 1rem;
+                align-items: center;
+            }
+
+            .topbar > * {
+                min-width: 0;
+            }
+
+            .topbar .mini-group,
+            .topbar .cta-stack {
+                display: none;
+            }
+
+            .topbar.menu-open .mini-group,
+            .topbar.menu-open .cta-stack {
+                grid-column: 1 / -1;
+                display: grid;
+                padding-top: 0.5rem;
+            }
+
+            .menu-button {
+                display: block;
+                justify-self: end;
+            }
+
+            .identity strong {
+                max-width: 100%;
+            }
+
+            .hero-intro,
+            .section-head,
+            .about-layout,
+            .certificate-layout,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .hero-intro {
+                grid-column: 1;
+                grid-row: auto;
+                width: calc(100% - 2.5rem);
+                max-width: calc(100% - 2.5rem);
+                margin: 0 auto;
+                min-width: 0;
+            }
+
+            .hero-intro p {
+                max-width: 100%;
+            }
+
+            .floating-photo.one {
+                grid-column: 1;
+                grid-row: auto;
+                justify-self: center;
+                width: min(520px, calc(100% - 2.5rem));
+                max-width: calc(100% - 2.5rem);
+                aspect-ratio: 16 / 10;
+                margin: 0;
+                transform: none;
+            }
+
+            .floating-photo.two {
+                display: none;
+            }
+
+            .wordmark-wrap {
+                grid-column: 1;
+                grid-row: auto;
+                height: clamp(175px, 29vw, 280px);
+            }
+
+            .wordmark {
+                left: 50%;
+                width: calc(100% - 2.5rem);
+                max-width: calc(100% - 2.5rem);
+                font-size: clamp(4.4rem, 15vw, 8rem);
+                line-height: 0.86;
+                letter-spacing: -0.075em;
+                white-space: normal;
+                transform: translateX(-50%);
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .company-row {
+                grid-template-columns: 70px 1fr;
+            }
+
+            .company-row p {
+                grid-column: 2;
+                max-width: 540px;
+            }
+        }
+
+        @media (max-width: 720px) {
+            body {
+                width: 100%;
+                overflow-x: hidden;
+            }
+
+            .page-shell {
+                width: 100%;
+                max-width: 100vw;
+                overflow: hidden;
+            }
+
+            .hero,
+            .hero *,
+            .topbar,
+            .topbar *,
+            .section,
+            .section * {
+                max-width: 100vw;
+            }
+
+            .topbar {
+                width: 100vw;
+                grid-template-columns: 1fr auto;
+                padding: 1.1rem;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .topbar > * {
+                min-width: 0;
+            }
+
+            .identity strong {
+                max-width: 100%;
+            }
+
+            .topbar .mini-group,
+            .topbar .cta-stack {
+                display: none;
+            }
+
+            .topbar.menu-open {
+                grid-template-columns: 1fr auto;
+            }
+
+            .topbar.menu-open .mini-group,
+            .topbar.menu-open .cta-stack {
+                grid-column: 1 / -1;
+                display: grid;
+                padding-top: 0.5rem;
+            }
+
+            .menu-button {
+                display: block;
+                justify-self: end;
+            }
+
+            .hero {
+                min-height: auto;
+                padding-top: 3rem;
+                gap: 1.2rem;
+                width: 100%;
+                max-width: 100vw;
+                overflow: visible;
+            }
+
+            .hero-intro {
+                display: block !important;
+                width: auto !important;
+                max-width: none !important;
+                margin: 0 24px 2.5rem !important;
+                min-width: 0;
+            }
+
+            .hero-intro p {
+                display: block;
+                width: auto;
+                max-width: 300px !important;
+                font-size: 1rem;
+                line-height: 1.45;
+            }
+
+            .hero-badge {
+                width: fit-content;
+                max-width: 300px;
+                margin-top: 1.2rem;
+                white-space: normal;
+            }
+
+            .wordmark-wrap {
+                height: auto;
+                padding: 1rem 0 1.5rem;
+                overflow: visible;
+            }
+
+            .wordmark {
+                position: relative;
+                top: auto;
+                bottom: auto;
+                left: auto;
+                width: auto !important;
+                max-width: none !important;
+                padding: 0 1rem;
+                font-size: clamp(3rem, 13vw, 4.2rem);
+                line-height: 0.92;
+                letter-spacing: -0.045em;
+                white-space: normal;
+                overflow-wrap: break-word;
+                text-align: center;
+                transform: none;
+            }
+
+            .floating-photo.one {
+                box-sizing: border-box;
+                display: block;
+                width: min(300px, calc(100vw - 48px)) !important;
+                max-width: 300px !important;
+                aspect-ratio: 16 / 11;
+                margin: 0 24px 1.75rem !important;
+                border-width: 5px;
+                border-radius: 20px;
+                transform: none !important;
+            }
+
+            .floating-photo.two {
+                display: none;
+            }
+
+            .section,
+            .contact-section {
+                padding-left: 1.1rem;
+                padding-right: 1.1rem;
+            }
+
+            .profile-grid,
+            .gallery-grid,
+            .modal-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .portrait-card,
+            .day-card,
+            .certificate-frame,
+            .certificate-copy {
+                min-height: 420px;
+                border-radius: 24px;
+            }
+
+            .info-card,
+            .info-card.wide {
+                min-height: 210px;
+                border-radius: 24px;
+            }
+
+            .skill-row {
+                grid-template-columns: 82px 1fr 40px;
+            }
+
+            .company-row {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+
+            .company-row p {
+                grid-column: auto;
+            }
+
+            .certificate-copy {
+                padding: 1.25rem;
+            }
+
+            .contact-panel {
+                min-height: 360px;
+                padding: 1.25rem;
+                border-radius: 24px 24px 0 0;
+            }
+
+            .modal {
+                padding: 0.6rem;
+            }
+
+            .modal-content {
+                border-radius: 24px;
+            }
+
+            .modal-image {
+                min-height: 260px;
+                border-radius: 18px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .loader {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <div class="logo">NEO</div>
-            <ul class="nav-links">
-                <li><a href="#about">ABOUT</a></li>
-                <li><a href="#gallery">GALLERY</a></li>
-                <li><a href="#companies">COMPANIES</a></li>
-                <li><a href="#certification">CERT</a></li>
-            </ul>
-            <div class="hamburger" onclick="toggleMenu()">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-    </nav>
+    <div class="pixel-snow-container" id="pixel-snow-bg" aria-hidden="true"></div>
 
-    <section class="hero">
-        <div class="hero-content">
-            <div class="hero-badge">★ PORTFOLIO 2025 ★</div>
-            <h1>
-                <span class="line1">NEO</span>
-                <span class="line2">CUIZON</span>
-                <span class="line3">PORTFOLIO</span>
-            </h1>
-            <div class="subtitle">IT PROFESSIONAL × WEB DEVELOPER</div>
-            <div class="cta-group">
-                <a href="#gallery" class="btn btn-primary">VIEW WORK →</a>
-                <a href="#contact" class="btn btn-secondary">CONTACT</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="fade-up">
-        <h2 class="section-title">// ABOUT ME</h2>
-        <div class="about-grid">
-            <div class="about-box">
-                <h3>[BIOGRAPHY]</h3>
-                <p>
-                    DEDICATED IT STUDENT WITH A PASSION FOR WEB DEVELOPMENT AND TECHNOLOGY. 
-                    GAINED HANDS-ON EXPERIENCE IN HTML, CSS, AND JAVASCRIPT THROUGH INTENSIVE 
-                    INTERNSHIP PROGRAMS. CONSTANTLY LEARNING AND PUSHING BOUNDARIES IN MODERN 
-                    WEB DEVELOPMENT.
-                </p>
-            </div>
-            <div class="about-box">
-                <h3>[SKILLS]</h3>
-                <div class="skill-bar">
-                    <h4>HTML</h4>
-                    <div class="bar-container">
-                        <div class="bar-fill" style="width: 80%">80%</div>
-                    </div>
-                </div>
-                <div class="skill-bar">
-                    <h4>CSS</h4>
-                    <div class="bar-container">
-                        <div class="bar-fill" style="width: 80%">80%</div>
-                    </div>
-                </div>
-                <div class="skill-bar">
-                    <h4>JAVASCRIPT</h4>
-                    <div class="bar-container">
-                        <div class="bar-fill" style="width: 60%">60%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="gallery" class="fade-up">
-        <h2 class="section-title">// GALLERY</h2>
-        <div class="gallery-grid">
-            <div class="day-box" onclick="openModal(1)">
-                <div class="day-number">01</div>
-                <div class="day-icon">📋</div>
-                <h3>DAY ONE</h3>
-                <p>ORIENTATION & INTRODUCTION TO THE COMPANY CULTURE AND TEAM MEMBERS</p>
-            </div>
-            <div class="day-box" onclick="openModal(2)">
-                <div class="day-number">02</div>
-                <div class="day-icon">💻</div>
-                <h3>DAY TWO</h3>
-                <p>SYSTEM FAMILIARIZATION AND SETUP OF DEVELOPMENT ENVIRONMENT</p>
-            </div>
-            <div class="day-box" onclick="openModal(3)">
-                <div class="day-number">03</div>
-                <div class="day-icon">🎨</div>
-                <h3>DAY THREE</h3>
-                <p>WEB DESIGN AND DEVELOPMENT HANDS-ON PRACTICE SESSIONS</p>
-            </div>
-            <div class="day-box" onclick="openModal(4)">
-                <div class="day-number">04</div>
-                <div class="day-icon">🎯</div>
-                <h3>DAY FOUR</h3>
-                <p>FINAL PRESENTATION & REFLECTION ON TOUR EXPERIENCE</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="companies" class="fade-up">
-        <h2 class="section-title">// COMPANIES</h2>
-        <div class="companies-grid">
-            <div class="company-box">
-                <div class="company-logo">WI</div>
-                <h3>WORLDTECH INFO</h3>
-                <p>ENTERPRISE SYSTEMS</p>
-            </div>
-            <div class="company-box">
-                <div class="company-logo">RI</div>
-                <h3>RIVAN IT CEBU</h3>
-                <p>SOFTWARE DEV</p>
-            </div>
-            <div class="company-box">
-                <div class="company-logo">CC</div>
-                <h3>CODECHUM</h3>
-                <p>EDUCATION PLATFORM</p>
-            </div>
-            <div class="company-box">
-                <div class="company-logo">MT</div>
-                <h3>MATA TECH INC</h3>
-                <p>TECH SOLUTIONS</p>
-            </div>
-            <div class="company-box">
-                <div class="company-logo">911</div>
-                <h3>TAGBILARAN 911</h3>
-                <p>EMERGENCY SERVICES</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="certification" class="fade-up">
-        <h2 class="section-title">// CERTIFICATION</h2>
-        <div class="cert-container">
-            <div class="cert-box">
-                <div class="cert-image">
-                    <img src="images/CertNINeo.jpg" alt="Certificate of Completion" style="max-width: 100%; height: auto; border: 3px solid var(--black);">
-                </div>
-                <h3>CERTIFICATE OF COMPLETION</h3>
-                <p><strong>Educational Tour in Cebu and Bohol</strong><br>
-                World of Adventures Travel and Tours<br>
-                November 12-15, 2025<br><br>
-                <strong>Companies Visited:</strong><br>
-                • UP CEBU BUSINESS INCUBATOR FOR IT<br>
-                • DYNATA PHILIPPINES, INC.<br>
-                • RIVAN IT CEBU<br>
-                • MATA TECHNOLOGIES, INC.<br>
-                • TELEPHONE AND RADIO SYSTEM INTEGRATED EMERGENCY RESPONSE</p>
-            </div>
-        </div>
-    </section>
-
-    <footer id="contact">
-        <h3>// LET'S CONNECT</h3>
-        <div class="footer-links">
-            <a href="mailto:neo@example.com">EMAIL</a>
-            <a href="#">LINKEDIN</a>
-            <a href="#">GITHUB</a>
-        </div>
-        <p class="copyright">© 2025 NEO CUIZON — ALL RIGHTS RESERVED</p>
-    </footer>
-
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">X</button>
-            <div id="modal-body"></div>
+    <div class="loader" id="loader" aria-label="Loading portfolio" role="status">
+        <div class="loader-inner">
+            <span class="loader-kicker">Welcome to the portfolio</span>
+            <h2 class="loader-title">Neo</h2>
+            <div class="loader-line" aria-hidden="true"><span></span></div>
         </div>
     </div>
 
-    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="page-shell">
+        <header class="topbar" id="topbar">
+            <a class="identity" href="#main" aria-label="Neo Cuizon home">
+                <strong>Neo Cuizon is an IT student documenting a Cebu and Bohol learning tour.</strong>
+                <span>Portfolio / Web development / Industry exposure</span>
+            </a>
+
+            <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="mini-group" aria-label="Portfolio navigation">
+                <span class="mini-label">Explore</span>
+                <ul class="mini-nav">
+                    <li><a href="#about">Bio</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#companies">Companies</a></li>
+                    <li><a href="#certificate">Certificate</a></li>
+                </ul>
+            </nav>
+
+            <div class="mini-group">
+                <span class="mini-label">Follow me</span>
+                <ul class="socials">
+                    <li><a href="mailto:neo@example.com"><span class="dot"></span>Email Neo</a></li>
+                    <li><a href="#"><span class="dot green"></span>LinkedIn</a></li>
+                    <li><a href="#"><span class="dot blue"></span>GitHub</a></li>
+                </ul>
+            </div>
+
+            <div class="cta-stack">
+                <a class="cta-link" href="#contact">Call Neo <span class="bubble">+</span></a>
+                <span class="status">Available for feedback</span>
+            </div>
+        </header>
+
+        <main id="main">
+            <section class="hero" aria-labelledby="hero-title">
+                <div class="hero-intro reveal">
+                    <p>A visual portfolio for company visits, technical exposure, field documentation, and the moments that shaped the educational tour.</p>
+                    <span class="hero-badge">Educational Tour 2025</span>
+                </div>
+
+                <figure class="floating-photo one reveal">
+                    <img src="images/IFell group pic.jpg" alt="Group photo from the educational tour">
+                </figure>
+                <figure class="floating-photo two reveal">
+                    <img src="images/UP.jpg" alt="UP Cebu visit group photo">
+                </figure>
+
+                <div class="wordmark-wrap" aria-hidden="true">
+                    <h1 class="wordmark" id="hero-title">Neo Cuizon</h1>
+                </div>
+            </section>
+
+            <section class="section reveal" id="about" aria-labelledby="about-title">
+                <div class="section-head">
+                    <span class="section-number">01 / Bio</span>
+                    <h2 class="section-title" id="about-title">Learning by seeing real systems.</h2>
+                </div>
+
+                <div class="about-layout">
+                    <figure class="portrait-card">
+                        <img src="images/Neo mars.jpg" alt="Neo Cuizon portrait">
+                    </figure>
+
+                    <div class="profile-grid">
+                        <article class="info-card wide">
+                            <span>Profile</span>
+                            <strong>IT student focused on web development, documentation, and practical technology exposure.</strong>
+                        </article>
+                        <article class="info-card">
+                            <span>Current focus</span>
+                            <strong>HTML, CSS, JavaScript, visual presentation, and user-facing websites.</strong>
+                        </article>
+                        <article class="info-card">
+                            <span>Tour result</span>
+                            <strong>Company insights, stronger confidence, and a clearer view of IT work.</strong>
+                        </article>
+                        <article class="info-card wide">
+                            <span>Skills</span>
+                            <div class="skill-list">
+                                <div class="skill-row"><span>HTML</span><span class="skill-track"><i style="width: 80%"></i></span><span>80%</span></div>
+                                <div class="skill-row"><span>CSS</span><span class="skill-track"><i style="width: 80%"></i></span><span>80%</span></div>
+                                <div class="skill-row"><span>JS</span><span class="skill-track"><i style="width: 60%"></i></span><span>60%</span></div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section reveal" id="gallery" aria-labelledby="gallery-title">
+                <div class="section-head">
+                    <span class="section-number">02 / Gallery</span>
+                    <h2 class="section-title" id="gallery-title">Four days, framed as a visual field note.</h2>
+                </div>
+
+                <div class="gallery-grid">
+                    <button class="day-card" type="button" data-day="1">
+                        <span class="day-media"><img src="images/Basilica.jpg" alt="Basilica in Cebu"></span>
+                        <span class="day-copy">
+                            <span>
+                                <span class="day-meta"><span>Day 01</span><span>4 frames</span></span>
+                                <h3>Cebu landmarks</h3>
+                                <p>First impressions, historical sites, and visual orientation.</p>
+                            </span>
+                            <span class="open-row">Open set <span>+</span></span>
+                        </span>
+                    </button>
+
+                    <button class="day-card" type="button" data-day="2">
+                        <span class="day-media"><img src="images/Dynata.jpg" alt="Company visit photo"></span>
+                        <span class="day-copy">
+                            <span>
+                                <span class="day-meta"><span>Day 02</span><span>4 frames</span></span>
+                                <h3>Industry visits</h3>
+                                <p>Workplace exposure, team learning, and technology operations.</p>
+                            </span>
+                            <span class="open-row">Open set <span>+</span></span>
+                        </span>
+                    </button>
+
+                    <button class="day-card" type="button" data-day="3">
+                        <span class="day-media"><img src="images/Chocolate hills.jpg" alt="Chocolate Hills group photo"></span>
+                        <span class="day-copy">
+                            <span>
+                                <span class="day-meta"><span>Day 03</span><span>4 frames</span></span>
+                                <h3>Bohol route</h3>
+                                <p>Destinations, natural landmarks, and reflection outside class.</p>
+                            </span>
+                            <span class="open-row">Open set <span>+</span></span>
+                        </span>
+                    </button>
+
+                    <button class="day-card" type="button" data-day="4">
+                        <span class="day-media"><img src="images/NeoEating.jpg" alt="Team moment from the tour"></span>
+                        <span class="day-copy">
+                            <span>
+                                <span class="day-meta"><span>Day 04</span><span>4 frames</span></span>
+                                <h3>Closing moments</h3>
+                                <p>Group memories, candid photos, and final travel documentation.</p>
+                            </span>
+                            <span class="open-row">Open set <span>+</span></span>
+                        </span>
+                    </button>
+                </div>
+            </section>
+
+            <section class="section reveal" id="companies" aria-labelledby="companies-title">
+                <div class="section-head">
+                    <span class="section-number">03 / Companies</span>
+                    <h2 class="section-title" id="companies-title">Places that made the tour concrete.</h2>
+                </div>
+
+                <div class="companies">
+                    <article class="company-row">
+                        <div class="company-mark">UP</div>
+                        <h3>UP Cebu Business Incubator for IT</h3>
+                        <p>Innovation, incubation, and technology entrepreneurship.</p>
+                    </article>
+                    <article class="company-row">
+                        <div class="company-mark">DY</div>
+                        <h3>Dynata Philippines, Inc.</h3>
+                        <p>Data operations, research process, and business exposure.</p>
+                    </article>
+                    <article class="company-row">
+                        <div class="company-mark">RI</div>
+                        <h3>Rivan IT Cebu</h3>
+                        <p>Software development culture and team practice.</p>
+                    </article>
+                    <article class="company-row">
+                        <div class="company-mark">MT</div>
+                        <h3>Mata Technologies, Inc.</h3>
+                        <p>Technical solutions and systems in a professional setting.</p>
+                    </article>
+                    <article class="company-row">
+                        <div class="company-mark">911</div>
+                        <h3>Tagbilaran Emergency Response</h3>
+                        <p>Communication systems, radio operations, and public service.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section reveal" id="certificate" aria-labelledby="certificate-title">
+                <div class="section-head">
+                    <span class="section-number">04 / Certificate</span>
+                    <h2 class="section-title" id="certificate-title">Completion, documented.</h2>
+                </div>
+
+                <div class="certificate-layout">
+                    <figure class="certificate-frame">
+                        <img src="images/certificate.png" alt="Certificate of completion">
+                    </figure>
+
+                    <div class="certificate-copy">
+                        <div>
+                            <h3>Educational Tour in Cebu and Bohol.</h3>
+                            <p>Completed with World of Adventures Travel and Tours, November 12 to 15, 2025.</p>
+                        </div>
+                        <ul class="visit-list">
+                            <li>UP Cebu Business Incubator for IT</li>
+                            <li>Dynata Philippines, Inc.</li>
+                            <li>Rivan IT Cebu</li>
+                            <li>Mata Technologies, Inc.</li>
+                            <li>Telephone and Radio System Integrated Emergency Response</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="contact-section reveal" id="contact" aria-labelledby="contact-title">
+                <div class="contact-panel">
+                    <div class="contact-grid">
+                        <h2 id="contact-title">Neo</h2>
+                        <div>
+                            <p>Available for portfolio feedback, internship conversations, and learning-focused IT collaboration.</p>
+                            <div class="contact-links">
+                                <a href="mailto:neo@example.com">Email</a>
+                                <a href="#">LinkedIn</a>
+                                <a href="#">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal" id="gallery-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modal-title"></h2>
+                    <p id="modal-description"></p>
+                </div>
+                <button class="close-button" type="button" data-close-modal aria-label="Close gallery">x</button>
+            </div>
+            <div class="modal-gallery" id="modal-gallery"></div>
+        </div>
+    </div>
+
+    <button class="back-to-top" type="button" aria-label="Back to top">Top</button>
 
     <script>
-        function toggleMenu() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        }
+        const topbar = document.querySelector("#topbar");
+        const loader = document.querySelector("#loader");
+        const menuButton = document.querySelector(".menu-button");
+        const backToTop = document.querySelector(".back-to-top");
+        const modal = document.querySelector("#gallery-modal");
+        const modalTitle = document.querySelector("#modal-title");
+        const modalDescription = document.querySelector("#modal-description");
+        const modalGallery = document.querySelector("#modal-gallery");
+        const closeModalButton = document.querySelector("[data-close-modal]");
+        let lastFocusedElement = null;
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         const modalData = {
-            1: { 
-                title: '[DAY 01] CEBU TOUR', 
-                description: 'Exploring historical sites and landmarks in Cebu.', 
-                images: ['Basilica.jpg', 'Sto.nino.jpg', 'Lapu2Shrine.jpg', 'BaiHotelLoby.jpg']
+            1: {
+                title: "Day 01: Cebu Tour",
+                description: "Historical sites and first-day tour moments.",
+                images: ["Basilica.jpg", "Sto.nino.jpg", "Lapu2Shrine.jpg", "BaiHotelLoby.jpg"]
             },
-            2: { 
-                title: '[DAY 02] COMPANY VISITS', 
-                description: 'Visiting IT companies and learning about their operations.', 
-                images: ['UP.jpg', 'Up. In IT.jpg', 'Dynata.jpg', 'Mata.jpg']
+            2: {
+                title: "Day 02: Company Visits",
+                description: "IT company exposure and workplace learning.",
+                images: ["UP.jpg", "Up. In IT.jpg", "Dynata.jpg", "Mata.jpg"]
             },
-            3: { 
-                title: '[DAY 03] BOHOL ATTRACTIONS', 
-                description: 'Exploring Bohol\'s natural wonders and wildlife.', 
-                images: ['Chocolate hills.jpg', 'ManMadeForrest.jpg', 'Tarshier.jpg', 'Wonders.jpg']
+            3: {
+                title: "Day 03: Bohol Attractions",
+                description: "Natural destinations, landmarks, and tour documentation.",
+                images: ["Chocolate hills.jpg", "ManMadeForrest.jpg", "Tarshier.jpg", "Wonders.jpg"]
             },
-            4: { 
-                title: '[DAY 04] TEAM MOMENTS', 
-                description: 'Memorable moments with the group.', 
-                images: ['IFell group pic.jpg', 'NeoEating.jpg', 'OutsideMata.jpg', 'RivenIT.jpg']
+            4: {
+                title: "Day 04: Team Moments",
+                description: "Group memories and closing tour activities.",
+                images: ["IFell group pic.jpg", "NeoEating.jpg", "OutsideMata.jpg", "RivenIT.jpg"]
             }
         };
 
-        function openModal(d) {
-            const m = document.getElementById('modal');
-            const data = modalData[d];
-            let html = '<div class="modal-gallery">';
-            data.images.forEach(img => {
-                html += `<div class="modal-image"><img src="images/${img}" alt="${img}" style="width: 100%; height: 100%; object-fit: cover;"></div>`;
-            });
-            html += '</div>';
-            document.getElementById('modal-body').innerHTML = `
-                <h2>${data.title}</h2>
-                <p>${data.description}</p>
-                ${html}
-            `;
-            m.classList.add('active');
+        function setMenu(open) {
+            topbar.classList.toggle("menu-open", open);
+            menuButton.setAttribute("aria-expanded", String(open));
+            menuButton.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        }
+
+        menuButton.addEventListener("click", () => {
+            setMenu(!topbar.classList.contains("menu-open"));
+        });
+
+        document.querySelectorAll(".mini-nav a, .socials a, .cta-link").forEach((link) => {
+            link.addEventListener("click", () => setMenu(false));
+        });
+
+        document.querySelectorAll(".day-card").forEach((card) => {
+            card.addEventListener("click", () => openModal(card.dataset.day));
+        });
+
+        function imageAlt(fileName) {
+            return fileName.replace(/\.[^/.]+$/, "").replaceAll("-", " ").replaceAll("_", " ");
+        }
+
+        function openModal(day) {
+            const data = modalData[day];
+            lastFocusedElement = document.activeElement;
+            modalTitle.textContent = data.title;
+            modalDescription.textContent = data.description;
+            modalGallery.innerHTML = data.images.map((image) => (
+                `<figure class="modal-image"><img src="images/${image}" alt="${imageAlt(image)}"></figure>`
+            )).join("");
+            modal.classList.add("active");
+            document.body.style.overflow = "hidden";
+            closeModalButton.focus();
         }
 
         function closeModal() {
-            document.getElementById('modal').classList.remove('active');
+            modal.classList.remove("active");
+            document.body.style.overflow = "";
+            modalGallery.innerHTML = "";
+            if (lastFocusedElement) {
+                lastFocusedElement.focus();
+            }
         }
 
-        document.getElementById('modal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
+        closeModalButton.addEventListener("click", closeModal);
+
+        modal.addEventListener("click", (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
         });
 
-        window.addEventListener('scroll', function() {
-            const btn = document.querySelector('.back-to-top');
-            btn.classList.toggle('visible', window.scrollY > 500);
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && modal.classList.contains("active")) {
+                closeModal();
+            }
         });
 
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        window.addEventListener("scroll", () => {
+            backToTop.classList.toggle("visible", window.scrollY > 700);
+        }, { passive: true });
 
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(e => {
-                if (e.isIntersecting) e.target.classList.add('visible');
+        backToTop.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                    observer.unobserve(entry.target);
+                }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.14 });
 
-        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-        
-        document.querySelectorAll('.nav-links a').forEach(l => {
-            l.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('active'));
+        document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+
+        function initPixelSnow() {
+            const container = document.querySelector("#pixel-snow-bg");
+            if (!container || reduceMotion) return;
+
+            const canvas = document.createElement("canvas");
+            const gl = canvas.getContext("webgl", {
+                alpha: true,
+                antialias: false,
+                depth: false,
+                stencil: false,
+                premultipliedAlpha: false,
+                powerPreference: "high-performance"
+            });
+
+            if (!gl) return;
+            container.appendChild(canvas);
+
+            const vertexShaderSource = `
+                attribute vec2 aPosition;
+                void main() {
+                    gl_Position = vec4(aPosition, 0.0, 1.0);
+                }
+            `;
+
+            const fragmentShaderSource = `
+                precision mediump float;
+
+                uniform float uTime;
+                uniform vec2 uResolution;
+                uniform vec3 uColor;
+                uniform float uPixelResolution;
+                uniform float uDensity;
+                uniform float uSpeed;
+                uniform float uDirection;
+                uniform float uBrightness;
+
+                float hash(vec3 p) {
+                    p = fract(p * 0.3183099 + vec3(0.1, 0.2, 0.3));
+                    p *= 17.0;
+                    return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+                }
+
+                void main() {
+                    float pixelSize = max(1.0, floor(uResolution.x / uPixelResolution));
+                    vec2 pixel = floor(gl_FragCoord.xy / pixelSize);
+                    vec2 res = floor(uResolution / pixelSize);
+                    vec2 uv = pixel / res;
+
+                    float angle = radians(uDirection);
+                    vec2 wind = vec2(cos(angle), sin(angle)) * uSpeed * uTime * 0.055;
+                    vec2 driftUv = uv + wind;
+
+                    float layer = 0.0;
+                    for (int i = 0; i < 4; i++) {
+                        float fi = float(i);
+                        vec2 scale = vec2(32.0 + fi * 18.0, 24.0 + fi * 13.0);
+                        vec2 cell = floor(driftUv * scale + vec2(fi * 9.7, fi * 5.3));
+                        vec2 local = fract(driftUv * scale + vec2(fi * 9.7, fi * 5.3));
+
+                        float h = hash(vec3(cell, fi));
+                        float appear = step(1.0 - uDensity, h);
+                        vec2 center = vec2(hash(vec3(cell, fi + 11.0)), hash(vec3(cell, fi + 23.0)));
+                        float d = max(abs(local.x - center.x), abs(local.y - center.y));
+                        float flake = 1.0 - smoothstep(0.0, 0.08 + fi * 0.018, d);
+                        layer += flake * appear * (0.42 - fi * 0.065);
+                    }
+
+                    float vignette = 1.0 - smoothstep(0.18, 0.98, distance(uv, vec2(0.5)));
+                    float alpha = clamp(layer * vignette * uBrightness, 0.0, 0.55);
+                    gl_FragColor = vec4(uColor, alpha);
+                }
+            `;
+
+            function compileShader(type, source) {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    gl.deleteShader(shader);
+                    return null;
+                }
+                return shader;
+            }
+
+            const vertexShader = compileShader(gl.VERTEX_SHADER, vertexShaderSource);
+            const fragmentShader = compileShader(gl.FRAGMENT_SHADER, fragmentShaderSource);
+            if (!vertexShader || !fragmentShader) return;
+
+            const program = gl.createProgram();
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+            gl.linkProgram(program);
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+
+            const buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+                -1, -1,
+                 1, -1,
+                -1,  1,
+                -1,  1,
+                 1, -1,
+                 1,  1
+            ]), gl.STATIC_DRAW);
+
+            const position = gl.getAttribLocation(program, "aPosition");
+            const uniforms = {
+                time: gl.getUniformLocation(program, "uTime"),
+                resolution: gl.getUniformLocation(program, "uResolution"),
+                color: gl.getUniformLocation(program, "uColor"),
+                pixelResolution: gl.getUniformLocation(program, "uPixelResolution"),
+                density: gl.getUniformLocation(program, "uDensity"),
+                speed: gl.getUniformLocation(program, "uSpeed"),
+                direction: gl.getUniformLocation(program, "uDirection"),
+                brightness: gl.getUniformLocation(program, "uBrightness")
+            };
+
+            let width = 0;
+            let height = 0;
+            let frame = 0;
+            const start = performance.now();
+
+            function resize() {
+                const ratio = Math.min(window.devicePixelRatio || 1, 2);
+                width = container.clientWidth;
+                height = container.clientHeight;
+                canvas.width = Math.max(1, Math.floor(width * ratio));
+                canvas.height = Math.max(1, Math.floor(height * ratio));
+                canvas.style.width = `${width}px`;
+                canvas.style.height = `${height}px`;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+
+            function render(now) {
+                frame = window.requestAnimationFrame(render);
+                gl.useProgram(program);
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                gl.enableVertexAttribArray(position);
+                gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+                gl.uniform1f(uniforms.time, (now - start) * 0.001);
+                gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
+                gl.uniform3f(uniforms.color, 0.08, 0.08, 0.075);
+                gl.uniform1f(uniforms.pixelResolution, 185.0);
+                gl.uniform1f(uniforms.density, 0.28);
+                gl.uniform1f(uniforms.speed, 1.1);
+                gl.uniform1f(uniforms.direction, 125.0);
+                gl.uniform1f(uniforms.brightness, 0.75);
+
+                gl.clearColor(0, 0, 0, 0);
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+            }
+
+            resize();
+            window.addEventListener("resize", resize);
+            frame = window.requestAnimationFrame(render);
+        }
+
+        function hideLoader() {
+            if (!loader) return;
+            loader.classList.add("is-hidden");
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            initPixelSnow();
+            window.setTimeout(hideLoader, reduceMotion ? 0 : 1500);
         });
+
+        window.addEventListener("load", () => {
+            window.setTimeout(hideLoader, reduceMotion ? 0 : 900);
+        });
+
+        window.setTimeout(hideLoader, reduceMotion ? 0 : 2600);
+
+        if (!reduceMotion) {
+            const parallaxItems = [
+                { element: document.querySelector(".floating-photo.one"), speed: -0.1, base: "rotate(2deg)" },
+                { element: document.querySelector(".floating-photo.two"), speed: 0.08, base: "rotate(-3deg)" },
+                { element: document.querySelector(".wordmark"), speed: 0.04, base: "translateX(-50%)" },
+                { element: document.querySelector(".hero-intro"), speed: -0.045, base: "" }
+            ].filter((item) => item.element);
+
+            let ticking = false;
+
+            function updateParallax() {
+                const scrollY = window.scrollY;
+                const mobile = window.innerWidth <= 720;
+
+                parallaxItems.forEach((item) => {
+                    if (mobile && item.element.classList.contains("wordmark")) {
+                        item.element.style.transform = "";
+                        return;
+                    }
+
+                    const offset = Math.max(-80, Math.min(80, scrollY * item.speed));
+                    item.element.style.transform = `${item.base} translate3d(0, ${offset}px, 0)`.trim();
+                });
+
+                ticking = false;
+            }
+
+            window.addEventListener("scroll", () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(updateParallax);
+                    ticking = true;
+                }
+            }, { passive: true });
+
+            window.addEventListener("resize", updateParallax);
+            updateParallax();
+        }
     </script>
 </body>
 </html>
